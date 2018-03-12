@@ -13,6 +13,7 @@ export default class MyPokemonList extends React.Component {
     componentWillMount() {
         localforage.getItem('pokemons')
         .then((result) => {
+            result = result === null ? [] : result
             this.setState({
                 pokemonList: result
             });

@@ -1,9 +1,11 @@
 import React from 'react';
-import AddPokemonToList from './AddPokemonToList';
-import RemovePokemonFromList from './RemovePokemonFromList';
 import { Link } from 'react-router-dom'
 import { Pokedex } from './utils/Pokedex';
-
+import { localforage } from './utils/localforageSetup';
+import MyPokemonCheckbox from './MyPokemonCheckbox';
+import { withStyles } from 'material-ui/styles';
+import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 
 function debounce(fn, delay) {
     var timer = null;
@@ -22,13 +24,23 @@ function getNextPageOffset(nextPageUrl) {
     return nextPageOffset;
 }
 
-export default class PokemonList extends React.Component {
+const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+});
+
+class PokemonList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {pokemonList: [], pageNumber: 1, nextPageOffset: 10}
+        this.state = { checked: [], pokemonList: [], pageNumber: 1, nextPageOffset: 10 }
         // this.trackScrolling = debounce(this.trackScrolling, 2000);
+        this.updateMyListAfterRemovingAPokemon = this.updateMyListAfterRemovingAPokemon.bind(this);
+        this.updateMyListAfterAddingAPokemon = this.updateMyListAfterAddingAPokemon.bind(this);
     }
-    
+
     isBottom(el) {
         if (el) {
             return el.getBoundingClientRect().bottom <= window.innerHeight;
@@ -52,16 +64,22 @@ export default class PokemonList extends React.Component {
         }
 
         let self = this;
+        let pokemonList = [];
+        let nextPageOffset;
         Pokedex.getPokemonsList(interval)
         .then(function (response) {
-            let nextPageOffset = getNextPageOffset(response.next);
-
+            pokemonList = response.results;
+            nextPageOffset = getNextPageOffset(response.next);
+            return localforage.getItem('pokemons')
+        })
+        .then(function(pokemonsInMyList) {
             // Append more pokemons
             self.setState({
-                pokemonList: [...self.state.pokemonList, ...response.results],
-                nextPageOffset: nextPageOffset
-            })
-        });
+                pokemonList: [...self.state.pokemonList, ...pokemonList],
+                nextPageOffset: nextPageOffset,
+                checked: pokemonsInMyList
+            });
+        })
         document.addEventListener('scroll', this.trackScrolling);
     }
 
@@ -79,33 +97,78 @@ export default class PokemonList extends React.Component {
             offset: 0
         }
         var self = this;
+        let pokemonList = [];
         Pokedex.getPokemonsList(interval)
         .then(function (response) {
+            pokemonList = response.results;
+            return localforage.getItem('pokemons')
+        })
+        .then(function (pokemonsInMyList) {
             // Append more pokemons
+            pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList
             self.setState({
-                pokemonList: [...self.state.pokemonList, ...response.results]
-            })
+                pokemonList: [...self.state.pokemonList, ...pokemonList],
+                checked: pokemonsInMyList
+            });
+        });
+    }
+
+    handleToggle = value => () => {
+        const { checked } = this.state;
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        this.setState({
+            checked: newChecked,
+        });
+    };
+
+    updateMyListAfterRemovingAPokemon(removedPokemon) {
+        let checked = this.state.checked.filter((pokemon) => { return pokemon !== removedPokemon });
+
+        this.setState({
+            checked: checked
+        });
+    }
+
+    updateMyListAfterAddingAPokemon(addedPokemon) {
+        this.setState({
+            checked: [...this.state.checked, addedPokemon]
         });
     }
 
     render() {
+        const { classes } = this.props;
+        console.log(this.state);
         const pokemons = this.state.pokemonList.map((link) =>
-            <React.Fragment key={link.url}>
-                <Link 
-                to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
-
-                <AddPokemonToList name={link.name} />
-                <RemovePokemonFromList name={link.name} />
-            </React.Fragment>
+            <ListItem key={link.url} dense button className={classes.listItem}>
+                <Avatar alt="Remy Sharp" src="https://material-ui-next.com/static/images/remy.jpg" />
+                <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
+                    <ListItemSecondaryAction>
+                        <MyPokemonCheckbox 
+                        name={link.name} 
+                        checked={this.state.checked} 
+                        updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
+                        updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />
+                    </ListItemSecondaryAction>
+                </Link>
+            </ListItem>
         );
 
         return (
-            <div id="pokemon-list">
-                <h1>Hello, {this.props.name}</h1>
-                <h3><Link to={'/list/'}>My List</Link></h3>
-
-                {pokemons}
+            <div className={`${classes.root}`} id="pokemon-list">
+                <List>
+                    {pokemons}
+                </List>
             </div>
         );
     }
 }
+
+export default withStyles(styles)(PokemonList);

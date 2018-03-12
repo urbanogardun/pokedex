@@ -12,3 +12,16 @@ h1.pokemon-name {
   text-decoration: inherit;
   color: inherit;
 }
+.pokemon-details-link {
+  width: 100%;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  text-align: left;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: inherit;
+  color: inherit;
+  width: 100%;
+  padding-left: 10px;
+}
