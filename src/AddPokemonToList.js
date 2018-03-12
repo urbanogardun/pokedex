@@ -1,12 +1,5 @@
 import React from 'react';
-const localforage = require("localforage");
-localforage.config({
-    driver: localforage.WEBSQL, // Force WebSQL; same as using setDriver(),
-    name: 'Pokedex-app',
-    version: 1.0,
-    storeName: 'pokedex_app',
-    description: 'Pokemoni!'
-});
+import { localforage } from './utils/localforageSetup';
 
 export default class AddPokemonToList extends React.Component {
 

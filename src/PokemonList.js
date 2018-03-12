@@ -1,5 +1,6 @@
 import React from 'react';
 import AddPokemonToList from './AddPokemonToList';
+import RemovePokemonFromList from './RemovePokemonFromList';
 import { Link } from 'react-router-dom'
 import { Pokedex } from './utils/Pokedex';
 
@@ -94,6 +95,7 @@ export default class PokemonList extends React.Component {
                 to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
 
                 <AddPokemonToList name={link.name} />
+                <RemovePokemonFromList name={link.name} />
             </React.Fragment>
         );
 
