@@ -1,4 +1,5 @@
 import React from 'react';
+import AddPokemonToList from './AddPokemonToList';
 import { Link } from 'react-router-dom'
 import { Pokedex } from './utils/Pokedex';
 
@@ -88,9 +89,12 @@ export default class PokemonList extends React.Component {
 
     render() {
         const pokemons = this.state.pokemonList.map((link) =>
-            <Link 
-            key={link.url} 
-            to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
+            <React.Fragment key={link.url}>
+                <Link 
+                to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
+
+                <AddPokemonToList name={link.name} />
+            </React.Fragment>
         );
 
         return (
