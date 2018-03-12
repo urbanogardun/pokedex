@@ -6,6 +6,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import { Link } from 'react-router-dom';
 
 const styles = {
   root: {
@@ -75,8 +76,8 @@ class NavigationAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleClose}><Link to={'/'} className="appbar-link">Početna</Link></MenuItem>
+                  <MenuItem onClick={this.handleClose}><Link to={'/list/'} className="appbar-link">Moji Pokemoni</Link></MenuItem>
                 </Menu>
               </div>
             )}
