@@ -24,6 +24,12 @@ function getNextPageOffset(nextPageUrl) {
     return nextPageOffset;
 }
 
+function getPokemonPhoto(pokemonUrl) {
+    let pokemonPhoto = pokemonUrl.split('/pokemon/').pop();
+    pokemonPhoto = pokemonPhoto.substring(0, pokemonPhoto.length - 1) + '.png';
+    return pokemonPhoto;
+}
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -145,21 +151,25 @@ class PokemonList extends React.Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state);
-        const pokemons = this.state.pokemonList.map((link) =>
-            <ListItem key={link.url} dense button className={classes.listItem}>
-                <Avatar alt="Remy Sharp" src="https://material-ui-next.com/static/images/remy.jpg" />
-                <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
-                    <ListItemSecondaryAction>
-                        <MyPokemonCheckbox 
-                        name={link.name} 
-                        checked={this.state.checked} 
-                        updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
-                        updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />
-                    </ListItemSecondaryAction>
-                </Link>
-            </ListItem>
-        );
+        const pokemons = this.state.pokemonList.map((link) => {
+            
+            let pokemonPhoto = getPokemonPhoto(link.url);
+
+            return (
+                <ListItem key={link.url} dense button className={classes.listItem}>
+                    <Avatar alt="Remy Sharp" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
+                    <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
+                        <ListItemSecondaryAction>
+                            <MyPokemonCheckbox 
+                            name={link.name} 
+                            checked={this.state.checked} 
+                            updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
+                            updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />
+                        </ListItemSecondaryAction>
+                    </Link>
+                </ListItem>
+            );
+        })
 
         return (
             <div className={`${classes.root}`} id="pokemon-list">
