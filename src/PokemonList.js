@@ -96,6 +96,7 @@ export default class PokemonList extends React.Component {
         return (
             <div id="pokemon-list">
                 <h1>Hello, {this.props.name}</h1>
+                <h3><Link to={'/list/'}>My List</Link></h3>
 
                 {pokemons}
             </div>
