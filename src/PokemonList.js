@@ -28,7 +28,7 @@ export default class PokemonList extends React.Component {
     }
     
     isBottom(el) {
-        if (el.getBoundingClientRect) {
+        if (el) {
             return el.getBoundingClientRect().bottom <= window.innerHeight;
         } else {
             return null;

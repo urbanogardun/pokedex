@@ -62,8 +62,8 @@ export default class PokemonDetails extends React.Component {
                 >{item.stat.name}</li>
             );
 
-            pokemonPhotoFront = <img src={pokemon.sprites.front_default} />
-            pokemonPhotoBack = <img src={pokemon.sprites.back_default} />
+            pokemonPhotoFront = <img src={pokemon.sprites.front_default} alt="" />
+            pokemonPhotoBack = <img src={pokemon.sprites.back_default} alt="" />
         }
 
         return (
