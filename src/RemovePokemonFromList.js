@@ -15,6 +15,7 @@ export default class RemovePokemonFromList extends React.Component {
             }
     
         }).then(() => {
+            this.props.updateMyListAfterRemovingAPokemon(this.props.name);
             return localforage.getItem('pokemons')
         }).then((value) => {
             console.log(value);
