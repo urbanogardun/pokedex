@@ -90,7 +90,7 @@ export default class PokemonList extends React.Component {
         const pokemons = this.state.pokemonList.map((link) =>
             <Link 
             key={link.url} 
-            to={`/pokemon/${link.url.split('/pokemon/').pop()}`}><li>{link.name}</li></Link>
+            to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
         );
 
         return (
