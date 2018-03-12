@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-const Pokedex = require('pokeapi-js-wrapper');
-const options = {
-  protocol: 'https',
-  versionPath: '/api/v2/',
-  cache: true,
-  timeout: 5 * 1000 // 5s
-}
-const P = new Pokedex.Pokedex(options);
+import { Pokedex } from './utils/Pokedex';
 
 class App extends Component {
   render() {
 
     var interval = {
-      limit: 10,
-      offset: 34
+      limit: 30,
+      offset: 14
     }
-    P.getPokemonsList(interval)
+    Pokedex.getPokemonsList(interval)
     .then(function(response) {
       console.log(response);
     });
