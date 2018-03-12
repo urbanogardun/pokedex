@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { Pokedex } from './utils/Pokedex';
 
 
@@ -22,12 +23,16 @@ function getNextPageOffset(nextPageUrl) {
 export default class PokemonList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {pokemonList: [], pageNumber: 1, nextPageOffset: 11}
+        this.state = {pokemonList: [], pageNumber: 1, nextPageOffset: 10}
         // this.trackScrolling = debounce(this.trackScrolling, 2000);
     }
     
     isBottom(el) {
-        return el.getBoundingClientRect().bottom <= window.innerHeight;
+        if (el.getBoundingClientRect) {
+            return el.getBoundingClientRect().bottom <= window.innerHeight;
+        } else {
+            return null;
+        }
     }
 
     trackScrolling = debounce(() => {
@@ -83,7 +88,9 @@ export default class PokemonList extends React.Component {
 
     render() {
         const pokemons = this.state.pokemonList.map((link) =>
-            <li key={link.url}>{link.name}</li>
+            <Link 
+            key={link.url} 
+            to={`/pokemon/${link.url.split('/pokemon/').pop()}`}><li>{link.name}</li></Link>
         );
 
         return (
