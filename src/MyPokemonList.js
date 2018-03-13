@@ -45,9 +45,9 @@ class MyPokemonList extends React.Component {
         const { classes } = this.props;
         const pokemons = this.state.pokemonList.map((link) => {
             return (
-                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={`/pokemon/${link.name}`} dense button className={classes.listItem}>
-                    <Avatar alt={link.name} src={link.photo} />
-                    <ListItemText primary={`${link.name}`} />
+                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={`/pokemon/${link.name}`} dense button className={`${classes.listItem} pokemon-list-item`}>
+                    <Avatar className="pokemon-avatar" alt={link.name} src={link.photo} />
+                    <ListItemText className="pokemon-list-name" primary={`${link.name}`} />
                         <ListItemSecondaryAction>
                             <MyPokemonCheckbox 
                             name={link.name} 

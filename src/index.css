@@ -100,19 +100,19 @@ li {
 
 /* Pokemon List and My List sections */
 
-#pokemon-list {
+#pokemon-list, #my-pokemon-list {
   margin: 0;
   width: 100%;
   max-width: 100%;
 }
 
-#pokemon-list > ul > li {
+#pokemon-list > ul > li, #my-pokemon-list > ul > li {
   padding-left: 0px;
   padding-right: 0px;
 }
 
 @media (min-width: 992px) {
-  #pokemon-list {
+  #pokemon-list, #my-pokemon-list {
     width: 100%;
     margin: 0 auto;
     max-width: 760px;
