@@ -198,7 +198,7 @@ class PokemonList extends React.Component {
 
             return (
                 <ListItem key={link.url} dense button className={classes.listItem}>
-                    <Avatar alt="Remy Sharp" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
+                    <Avatar alt={link.name} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
                     <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
                         <ListItemSecondaryAction>
                             <MyPokemonCheckbox 
