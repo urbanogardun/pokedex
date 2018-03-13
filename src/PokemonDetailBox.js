@@ -12,7 +12,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(16),
     fontWeight: theme.typography.fontWeightRegular,
   },
 });

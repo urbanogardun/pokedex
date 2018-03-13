@@ -96,3 +96,34 @@ li {
   padding: 7px;
   text-transform: capitalize;
 }
+
+
+/* Pokemon List and My List sections */
+
+#pokemon-list {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+#pokemon-list > ul > li {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+@media (min-width: 992px) {
+  #pokemon-list {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 760px;
+  }
+
+}
+  div.pokemon-avatar {
+    height: 75px;
+    width: 75px;
+  }
+
+  div.pokemon-list-name > h3 {
+    font-size: 0.9rem !important;
+  }

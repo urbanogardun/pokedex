@@ -47,7 +47,6 @@ class PokemonList extends React.Component {
     constructor(props) {
         super(props);
         this.state = { checked: [], pokemonList: [], pageNumber: 1, nextPageOffset: 50 }
-        // this.trackScrolling = debounce(this.trackScrolling, 2000);
         this.updateMyListAfterRemovingAPokemon = this.updateMyListAfterRemovingAPokemon.bind(this);
         this.updateMyListAfterAddingAPokemon = this.updateMyListAfterAddingAPokemon.bind(this);
         this.showAjaxLoaderIfOnBottom = this.showAjaxLoaderIfOnBottom.bind(this);
@@ -66,7 +65,6 @@ class PokemonList extends React.Component {
 
         if ( (this.state.pokemonList.length) && (document.getElementsByClassName('ajax-loader-pokemon-list')[0]) ) {
             if (this.isBottom(wrappedElement)) {
-                console.log('HIDE THE FIRST AJAX LOADER');
                 document.getElementsByClassName('ajax-loader-pokemon-list-initial')[0].style.visibility = 'hidden';  
                 document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.visibility = 'visible';
             } else {
@@ -79,7 +77,6 @@ class PokemonList extends React.Component {
     trackScrolling = debounce(() => {
         const wrappedElement = document.getElementById('pokemon-list');
         if (this.isBottom(wrappedElement)) {
-            console.log('pokemon-list bottom reached');
             this.loadMorePokemons();
         }
     }, 1000);
@@ -197,9 +194,9 @@ class PokemonList extends React.Component {
             let pokemonPhoto = getPokemonPhoto(link.url);
 
             return (
-                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={link.url} dense button className={classes.listItem}>
-                    <Avatar alt={link.name} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
-                    <ListItemText primary={`${link.name}`} />
+                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={link.url} dense button className={`${classes.listItem} pokemon-list-item`}>
+                    <Avatar alt={link.name} className="pokemon-avatar" src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
+                    <ListItemText className="pokemon-list-name" primary={`${link.name}`} />
                     <ListItemSecondaryAction>
                         <MyPokemonCheckbox 
                         name={link.name} 
