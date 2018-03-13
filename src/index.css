@@ -6,6 +6,13 @@ body {
 
 h1.pokemon-name {
   text-transform:capitalize;
+  text-align: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;;
+  font-weight: lighter;
+}
+
+div.pokemon-photos {
+  text-align: center;
 }
 
 .appbar-link {
@@ -30,4 +37,10 @@ h1.pokemon-name {
   width: 100%;
   margin: 0 auto;
   max-width: 360px;
+}
+
+li {
+  list-style-type: none;
+  padding: 7px;
+  text-transform: capitalize;
 }

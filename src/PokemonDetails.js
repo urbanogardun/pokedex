@@ -1,4 +1,5 @@
 import React from 'react';
+import PokemonDetailBox from './PokemonDetailBox';
 import { Pokedex } from './utils/Pokedex';
 
 export default class PokemonDetails extends React.Component {
@@ -31,23 +32,23 @@ export default class PokemonDetails extends React.Component {
         //     to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
         // );
 
-        let abilities = <div/>
-        let moves = <div/>
-        let types = <div />
-        let stats = <div />
-        let pokemonPhotoFront = <div />
-        let pokemonPhotoBack = <div />
+        let abilities = <span/>
+        let moves = <span/>
+        let types = <span/>
+        let stats = <span/>
+        let pokemonPhotoFront = <span/>
+        let pokemonPhotoBack = <span/>
         if (pokemon) {
             abilities = pokemon.abilities.map((item) =>
-                <li key={item.ability.url}>{item.ability.name}</li>
+                <li key={item.ability.url}>{item.ability.name.split('-').join(' ')}</li>
             );
 
             moves = pokemon.moves.map((item) =>
-                <li key={item.move.url}>{item.move.name}</li>
+                <li key={item.move.url}>{item.move.name.split('-').join(' ')}</li>
             );
 
             types = pokemon.types.map((item) =>
-                <li key={item.type.url}>{item.type.name}</li>
+                <li key={item.type.url}>{item.type.name.split('-').join(' ')}</li>
             );
         
             // pokemon.stats.map((item) => {
@@ -59,7 +60,7 @@ export default class PokemonDetails extends React.Component {
                 key={item.stat.url}
                 data-base-stat={item.base_stat}
                 data-effort={item.effort}
-                >{item.stat.name}</li>
+                >{`${item.stat.name.split('-').join(' ')} - ${item.base_stat}%`}</li>
             );
 
             pokemonPhotoFront = <img src={pokemon.sprites.front_default} alt="" />
@@ -70,12 +71,17 @@ export default class PokemonDetails extends React.Component {
             <React.Fragment>
                 <h1 className="pokemon-name">{pokemon.name}</h1>
 
-                {pokemonPhotoFront}
-                {pokemonPhotoBack}
+                <div className="pokemon-photos">
+                    {pokemonPhotoFront}
+                    {pokemonPhotoBack}
+                </div>
 
-                <hr />
+                <PokemonDetailBox boxName={"Sposobnosti"} boxItems={abilities} />
+                <PokemonDetailBox boxName={"Potezi"} boxItems={moves} />
+                <PokemonDetailBox boxName={"Vrsta"} boxItems={types} />
+                <PokemonDetailBox boxName={"Statistike"} boxItems={stats} />
 
-                <p>Sposobnosti</p>
+                {/* <p>Sposobnosti</p>
                 {abilities}
 
                 <hr />
@@ -91,8 +97,7 @@ export default class PokemonDetails extends React.Component {
                 <hr />
 
                 <p>Statistike</p>
-                {stats}
-
+                {stats} */}
             </React.Fragment>
         )
     }
