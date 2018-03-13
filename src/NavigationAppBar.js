@@ -58,7 +58,7 @@ class NavigationAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.flex}>
-              Pokedex - Skupi Sve!
+              <Link to={'/'} className="appbar-link">Pokedex - Skupi Sve!</Link>
             </Typography>
             {auth && (
               <div>
