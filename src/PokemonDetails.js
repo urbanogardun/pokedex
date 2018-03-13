@@ -87,24 +87,6 @@ export default class PokemonDetails extends React.Component {
                     <PokemonDetailBox boxName={"Potezi"} boxItems={moves} />
                     <PokemonDetailBox boxName={"Vrsta"} boxItems={types} />
                     <PokemonDetailBox boxName={"Statistike"} boxItems={stats} />
-
-                    {/* <p>Sposobnosti</p>
-                    {abilities}
-
-                    <hr />
-
-                    <p>Potezi</p>
-                    {moves}
-
-                    <hr />
-
-                    <p>Vrsta</p>
-                    {types}
-
-                    <hr />
-
-                    <p>Statistike</p>
-                    {stats} */}
                 </div>
             </React.Fragment>
         )
