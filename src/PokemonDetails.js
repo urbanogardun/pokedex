@@ -29,7 +29,7 @@ export default class PokemonDetails extends React.Component {
             return localforage.getItem('pokemons')
         })
         .then(function(result) {
-            let pokemonInMyList = result.filter((pokemon) => { return pokemon.name === pokemonName })
+            let pokemonInMyList = result !== null ? result.filter((pokemon) => { return pokemon.name === pokemonName }) : [];
             pokemonInMyList = pokemonInMyList.length > 0 ? true : false;
             self.setState({
                 pokemonInMyList,

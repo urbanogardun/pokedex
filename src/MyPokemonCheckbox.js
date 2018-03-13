@@ -48,13 +48,8 @@ class MyPokemonCheckbox extends React.Component {
     
         }).then(() => {
 
-            if (!this.props.onMainPokemonPage) {
-                this.props.updateMyListAfterRemovingAPokemon(this.props.name);
-            }
+            this.updateMyPokemonList('remove');
 
-            return localforage.getItem('pokemons')
-        }).then((value) => {
-            console.log(value);
         })
 
     }
@@ -74,15 +69,21 @@ class MyPokemonCheckbox extends React.Component {
     
         }).then(() => {
 
-            if (!this.props.onMainPokemonPage) {
-                this.props.updateMyListAfterAddingAPokemon(this.props.name);
-            }
+            this.updateMyPokemonList('add');
 
-            return localforage.getItem('pokemons')
-        }).then((value) => {
-            console.log(value);
         })
 
+    }
+
+    // Instantly update parent state when pokemon gets removed/added on my list
+    updateMyPokemonList(action) {
+        if (!this.props.onMainPokemonPage) {
+            if (action === 'add') {
+                this.props.updateMyListAfterAddingAPokemon(this.props.name);
+            } else if (action === 'remove') {
+                this.props.updateMyListAfterRemovingAPokemon(this.props.name);
+            }
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -114,12 +115,14 @@ class MyPokemonCheckbox extends React.Component {
     render() {
         if (this.props.onMainPokemonPage) {
             return (
-                <Switch
-                    onClick={(e) => { e.stopPropagation(); }}
-                    checked={this.state.checked.length > 0}
-                    onChange={(e) => {this.handleTogglePokemonDetailsPage(this.props.name)}}
-                    title={this.state.checked.length > 0 ? "Izbaci Pokemona iz moje liste" : "Dodaj Pokemona u listu"}
-                />
+                <div className="on-off-switch-pokemon">
+                    <Switch
+                        onClick={(e) => { e.stopPropagation(); }}
+                        checked={this.state.checked.length > 0}
+                        onChange={(e) => {this.handleTogglePokemonDetailsPage(this.props.name)}}
+                        title={this.state.checked.length > 0 ? "Izbaci Pokemona iz moje liste" : "Dodaj Pokemona u listu"}
+                    />
+                </div>
             );
         } else {
             return (
