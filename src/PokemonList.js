@@ -79,6 +79,7 @@ class PokemonList extends React.Component {
             return localforage.getItem('pokemons')
         })
         .then(function(pokemonsInMyList) {
+            pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList.map((val) => { return val.name })
             // Append more pokemons
             self.setState({
                 pokemonList: [...self.state.pokemonList, ...pokemonList],
@@ -111,7 +112,7 @@ class PokemonList extends React.Component {
         })
         .then(function (pokemonsInMyList) {
             // Append more pokemons
-            pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList
+            pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList.map((val) => { return val.name })
             self.setState({
                 pokemonList: [...self.state.pokemonList, ...pokemonList],
                 checked: pokemonsInMyList
@@ -162,6 +163,7 @@ class PokemonList extends React.Component {
                         <ListItemSecondaryAction>
                             <MyPokemonCheckbox 
                             name={link.name} 
+                            pokemonPhoto={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`}
                             checked={this.state.checked} 
                             updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
                             updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />

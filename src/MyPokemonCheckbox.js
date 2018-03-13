@@ -23,7 +23,7 @@ class MyPokemonCheckbox extends React.Component {
 
         if (currentIndex === -1) {
             newChecked.push(value);
-            this.addPokemonToList(this.props.name);
+            this.addPokemonToList(this.props.name, this.props.pokemonPhoto);
         } else {
             this.removePokemonFromList(this.props.name);
             newChecked.splice(currentIndex, 1);
@@ -39,7 +39,7 @@ class MyPokemonCheckbox extends React.Component {
         localforage.getItem('pokemons')
         .then((value) => {
 
-            value = value.filter((val) => { return val !== pokemon })
+            value = value.filter((val) => { return val.name !== pokemon })
 
             if ( (value !== null) || (value.length) ) {
                 return localforage.setItem('pokemons', [...value])
@@ -54,17 +54,19 @@ class MyPokemonCheckbox extends React.Component {
 
     }
 
-    addPokemonToList(pokemon) {
+    addPokemonToList(pokemon, pokemonPhoto) {
         console.log(pokemon);
+        console.log('photo: ' + pokemonPhoto);
 
         localforage.getItem('pokemons')
         .then((value) => {
 
             if ( (value === null) || (!value.length) ) {
-                return localforage.setItem('pokemons', [pokemon])
+                return localforage.setItem('pokemons', [{name: pokemon, photo: pokemonPhoto}])
             } else {
-                if (value.indexOf(pokemon) === -1) {
-                    return localforage.setItem('pokemons', [...value, pokemon])
+                let isPokemonAlreadySaved = value.find(val => val.name === pokemon);
+                if (!isPokemonAlreadySaved) {
+                    return localforage.setItem('pokemons', [...value, {name: pokemon, photo: pokemonPhoto}])
                 }
             }
     
