@@ -41,7 +41,7 @@ const styles = theme => ({
 class PokemonList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { checked: [], pokemonList: [], pageNumber: 1, nextPageOffset: 10 }
+        this.state = { checked: [], pokemonList: [], pageNumber: 1, nextPageOffset: 50 }
         // this.trackScrolling = debounce(this.trackScrolling, 2000);
         this.updateMyListAfterRemovingAPokemon = this.updateMyListAfterRemovingAPokemon.bind(this);
         this.updateMyListAfterAddingAPokemon = this.updateMyListAfterAddingAPokemon.bind(this);
@@ -65,7 +65,7 @@ class PokemonList extends React.Component {
 
     loadMorePokemons() {
         let interval = {
-            limit: 10,
+            limit: 20,
             offset: this.state.nextPageOffset
         }
 
@@ -99,7 +99,7 @@ class PokemonList extends React.Component {
 
     componentWillMount() {
         var interval = {
-            limit: 10,
+            limit: 50,
             offset: 0
         }
         var self = this;
