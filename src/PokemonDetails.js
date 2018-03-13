@@ -1,6 +1,7 @@
 import React from 'react';
 import PokemonDetailBox from './PokemonDetailBox';
 import { Pokedex } from './utils/Pokedex';
+import { CircularProgress } from 'material-ui/Progress';
 
 export default class PokemonDetails extends React.Component {
     constructor(props) {
@@ -10,11 +11,13 @@ export default class PokemonDetails extends React.Component {
 
     componentWillMount() {
         let pokemonName = this.props.match.params.name;
-        console.log('GET DETAILS FOR POKEMON: ' + pokemonName);
         let self = this;
         Pokedex.getPokemonByName(pokemonName)
         .then(function(response) {
-            console.log(response);
+
+            // Hide ajax loader and display retrieved pokemon data
+            document.getElementsByClassName('ajax-loader')[0].style.visibility = 'hidden';
+            document.getElementById('pokemon-details').style.visibility = 'initial';
 
             self.setState({
                 pokemonName: pokemonName,
@@ -69,35 +72,38 @@ export default class PokemonDetails extends React.Component {
 
         return (
             <React.Fragment>
-                <h1 className="pokemon-name">{pokemon.name}</h1>
+                <CircularProgress className="ajax-loader" size={50} />
+                <div id="pokemon-details">
+                    <h1 className="pokemon-name">{pokemon.name}</h1>
 
-                <div className="pokemon-photos">
-                    {pokemonPhotoFront}
-                    {pokemonPhotoBack}
+                    <div className="pokemon-photos">
+                        {pokemonPhotoFront}
+                        {pokemonPhotoBack}
+                    </div>
+
+                    <PokemonDetailBox boxName={"Sposobnosti"} boxItems={abilities} />
+                    <PokemonDetailBox boxName={"Potezi"} boxItems={moves} />
+                    <PokemonDetailBox boxName={"Vrsta"} boxItems={types} />
+                    <PokemonDetailBox boxName={"Statistike"} boxItems={stats} />
+
+                    {/* <p>Sposobnosti</p>
+                    {abilities}
+
+                    <hr />
+
+                    <p>Potezi</p>
+                    {moves}
+
+                    <hr />
+
+                    <p>Vrsta</p>
+                    {types}
+
+                    <hr />
+
+                    <p>Statistike</p>
+                    {stats} */}
                 </div>
-
-                <PokemonDetailBox boxName={"Sposobnosti"} boxItems={abilities} />
-                <PokemonDetailBox boxName={"Potezi"} boxItems={moves} />
-                <PokemonDetailBox boxName={"Vrsta"} boxItems={types} />
-                <PokemonDetailBox boxName={"Statistike"} boxItems={stats} />
-
-                {/* <p>Sposobnosti</p>
-                {abilities}
-
-                <hr />
-
-                <p>Potezi</p>
-                {moves}
-
-                <hr />
-
-                <p>Vrsta</p>
-                {types}
-
-                <hr />
-
-                <p>Statistike</p>
-                {stats} */}
             </React.Fragment>
         )
     }
