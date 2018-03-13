@@ -3,6 +3,7 @@ import { Pokedex } from './utils/Pokedex';
 import { goToPokemon } from './utils/helpers';
 import { localforage } from './utils/localforageSetup';
 import MyPokemonCheckbox from './MyPokemonCheckbox';
+import SearchPokemons from './SearchPokemons';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
@@ -213,6 +214,7 @@ class PokemonList extends React.Component {
             <React.Fragment>
                 <CircularProgress className="ajax-loader-pokemon-list-initial" size={50} />
                 <div className={`${classes.root}`} id="pokemon-list">
+                <SearchPokemons />
                     <List>
                         {pokemons}
                         <CircularProgress className="ajax-loader-pokemon-list" size={50} />

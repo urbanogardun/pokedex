@@ -102,6 +102,9 @@ li {
   text-transform: capitalize;
 }
 
+div.search-pokemons {
+  padding-top: 200px;
+}
 
 /* Pokemon List and My List sections */
 
