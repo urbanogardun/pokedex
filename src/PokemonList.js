@@ -64,8 +64,10 @@ class PokemonList extends React.Component {
     showAjaxLoaderIfOnBottom() {
         const wrappedElement = document.getElementById('pokemon-list');
 
-        if (document.getElementsByClassName('ajax-loader-pokemon-list')[0]) {
+        if ( (this.state.pokemonList.length) && (document.getElementsByClassName('ajax-loader-pokemon-list')[0]) ) {
             if (this.isBottom(wrappedElement)) {
+                console.log('HIDE THE FIRST AJAX LOADER');
+                document.getElementsByClassName('ajax-loader-pokemon-list-initial')[0].style.visibility = 'hidden';  
                 document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.visibility = 'visible';
             } else {
                 document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.visibility = 'hidden';
@@ -128,7 +130,7 @@ class PokemonList extends React.Component {
 
     componentWillUnmount() {
         document.removeEventListener('scroll', this.trackScrolling);
-        document.addEventListener('scroll', this.showAjaxLoaderIfOnBottom);
+        document.removeEventListener('scroll', this.showAjaxLoaderIfOnBottom);
     }
 
     componentWillMount() {

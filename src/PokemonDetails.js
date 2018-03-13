@@ -16,8 +16,10 @@ export default class PokemonDetails extends React.Component {
         .then(function(response) {
 
             // Hide ajax loader and display retrieved pokemon data
-            document.getElementsByClassName('ajax-loader')[0].style.visibility = 'hidden';
-            document.getElementById('pokemon-details').style.visibility = 'initial';
+            if (document.getElementsByClassName('ajax-loader')[0]) {
+                document.getElementsByClassName('ajax-loader')[0].style.visibility = 'hidden';
+                document.getElementById('pokemon-details').style.visibility = 'initial';
+            }
 
             self.setState({
                 pokemonName: pokemonName,
