@@ -6,6 +6,7 @@ import MyPokemonCheckbox from './MyPokemonCheckbox';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+import { CircularProgress } from 'material-ui/Progress';
 
 function debounce(fn, delay) {
     var timer = null;
@@ -19,9 +20,13 @@ function debounce(fn, delay) {
 }
 
 function getNextPageOffset(nextPageUrl) {
-    let nextPageOffset = nextPageUrl.split('=');
-    nextPageOffset = nextPageOffset[nextPageOffset.length - 1];
-    return nextPageOffset;
+    if (nextPageUrl) {
+        let nextPageOffset = nextPageUrl.split('=');
+        nextPageOffset = nextPageOffset[nextPageOffset.length - 1];
+        return nextPageOffset;
+    } else {
+        return null;
+    }
 }
 
 function getPokemonPhoto(pokemonUrl) {
@@ -45,6 +50,7 @@ class PokemonList extends React.Component {
         // this.trackScrolling = debounce(this.trackScrolling, 2000);
         this.updateMyListAfterRemovingAPokemon = this.updateMyListAfterRemovingAPokemon.bind(this);
         this.updateMyListAfterAddingAPokemon = this.updateMyListAfterAddingAPokemon.bind(this);
+        this.showAjaxLoaderIfOnBottom = this.showAjaxLoaderIfOnBottom.bind(this);
     }
 
     isBottom(el) {
@@ -53,6 +59,19 @@ class PokemonList extends React.Component {
         } else {
             return null;
         }
+    }
+
+    showAjaxLoaderIfOnBottom() {
+        const wrappedElement = document.getElementById('pokemon-list');
+
+        if (document.getElementsByClassName('ajax-loader-pokemon-list')[0]) {
+            if (this.isBottom(wrappedElement)) {
+                document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.visibility = 'visible';
+            } else {
+                document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.visibility = 'hidden';
+            }
+        }
+
     }
 
     trackScrolling = debounce(() => {
@@ -72,30 +91,44 @@ class PokemonList extends React.Component {
         let self = this;
         let pokemonList = [];
         let nextPageOffset;
-        Pokedex.getPokemonsList(interval)
-        .then(function (response) {
-            pokemonList = response.results;
-            nextPageOffset = getNextPageOffset(response.next);
-            return localforage.getItem('pokemons')
-        })
-        .then(function(pokemonsInMyList) {
-            pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList.map((val) => { return val.name })
-            // Append more pokemons
-            self.setState({
-                pokemonList: [...self.state.pokemonList, ...pokemonList],
-                nextPageOffset: nextPageOffset,
-                checked: pokemonsInMyList
-            });
-        })
-        document.addEventListener('scroll', this.trackScrolling);
+
+        // If there are more results left to get from pokeapi
+        if (this.state.nextPageOffset !== null) {
+            Pokedex.getPokemonsList(interval)
+            .then(function (response) {
+                pokemonList = response.results;
+                nextPageOffset = getNextPageOffset(response.next);
+                return localforage.getItem('pokemons')
+            })
+            .then(function(pokemonsInMyList) {
+                pokemonsInMyList = pokemonsInMyList === null ? [] : pokemonsInMyList.map((val) => { return val.name })
+                // Append more pokemons
+                self.setState({
+                    pokemonList: [...self.state.pokemonList, ...pokemonList],
+                    nextPageOffset: nextPageOffset,
+                    checked: pokemonsInMyList
+                });
+
+                // Cleanup if we got all the pokemons
+                if (nextPageOffset === null) {
+                    document.getElementsByClassName('ajax-loader-pokemon-list')[0].style.display = 'none';
+                    document.removeEventListener('scroll', self.trackScrolling);
+                    document.removeEventListener('scroll', self.showAjaxLoaderIfOnBottom);
+                }
+
+            })
+        }
+
     }
 
     componentDidMount() {
         document.addEventListener('scroll', this.trackScrolling);
+        document.addEventListener('scroll', this.showAjaxLoaderIfOnBottom);
     }
 
     componentWillUnmount() {
         document.removeEventListener('scroll', this.trackScrolling);
+        document.addEventListener('scroll', this.showAjaxLoaderIfOnBottom);
     }
 
     componentWillMount() {
@@ -177,6 +210,7 @@ class PokemonList extends React.Component {
             <div className={`${classes.root}`} id="pokemon-list">
                 <List>
                     {pokemons}
+                    <CircularProgress className="ajax-loader-pokemon-list" size={50} />
                 </List>
             </div>
         );
