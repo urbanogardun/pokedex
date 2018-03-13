@@ -26,7 +26,7 @@ h1.pokemon-name {
   padding-left: 10px;
 }
 
-#pokemon-list {
+#pokemon-list, #my-pokemon-list {
   width: 100%;
   margin: 0 auto;
   max-width: 360px;
