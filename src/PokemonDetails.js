@@ -2,15 +2,18 @@ import React from 'react';
 import PokemonDetailBox from './PokemonDetailBox';
 import { Pokedex } from './utils/Pokedex';
 import { CircularProgress } from 'material-ui/Progress';
+import { localforage } from './utils/localforageSetup';
+import MyPokemonCheckbox from './MyPokemonCheckbox';
 
 export default class PokemonDetails extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {pokemonName: null, pokemonData: ''}
+        this.state = {pokemonName: null, pokemonData: '', pokemonInMyList: false}
     }
 
     componentWillMount() {
         let pokemonName = this.props.match.params.name;
+        let pokemonData;
         let self = this;
         Pokedex.getPokemonByName(pokemonName)
         .then(function(response) {
@@ -21,9 +24,17 @@ export default class PokemonDetails extends React.Component {
                 document.getElementById('pokemon-details').style.visibility = 'initial';
             }
 
+            pokemonData = response;
+
+            return localforage.getItem('pokemons')
+        })
+        .then(function(result) {
+            let pokemonInMyList = result.filter((pokemon) => { return pokemon.name === pokemonName })
+            pokemonInMyList = pokemonInMyList.length > 0 ? true : false;
             self.setState({
-                pokemonName: pokemonName,
-                pokemonData: response
+                pokemonInMyList,
+                pokemonName,
+                pokemonData,
             })
         });
     }
@@ -31,16 +42,11 @@ export default class PokemonDetails extends React.Component {
     render() {
         const pokemon = this.state.pokemonData;
 
-        // const pokemons = this.state.pokemonList.map((link) =>
-        //     <Link 
-        //     key={link.url} 
-        //     to={`/pokemon/${link.name}`}><li>{link.name}</li></Link>
-        // );
-
         let abilities = <span/>
         let moves = <span/>
         let types = <span/>
         let stats = <span/>
+        let pokemonPhotoFrontLink;
         let pokemonPhotoFront = <span/>
         let pokemonPhotoBack = <span/>
         if (pokemon) {
@@ -56,10 +62,6 @@ export default class PokemonDetails extends React.Component {
                 <li key={item.type.url}>{item.type.name.split('-').join(' ')}</li>
             );
         
-            // pokemon.stats.map((item) => {
-            //     console.log(item);
-            // });
-
             stats = pokemon.stats.map((item) =>
                 <li 
                 key={item.stat.url}
@@ -68,6 +70,7 @@ export default class PokemonDetails extends React.Component {
                 >{`${item.stat.name.split('-').join(' ')} - ${item.base_stat}%`}</li>
             );
 
+            pokemonPhotoFrontLink = pokemon.sprites.front_default;
             pokemonPhotoFront = <img src={pokemon.sprites.front_default} alt="" />
             pokemonPhotoBack = <img src={pokemon.sprites.back_default} alt="" />
         }
@@ -77,6 +80,8 @@ export default class PokemonDetails extends React.Component {
                 <CircularProgress className="ajax-loader" size={50} />
                 <div id="pokemon-details">
                     <h1 className="pokemon-name">{pokemon.name}</h1>
+
+                    <MyPokemonCheckbox onMainPokemonPage={true} name={this.state.pokemonName} pokemonPhoto={pokemonPhotoFrontLink} isPokemonInMyList={this.state.pokemonInMyList} /> 
 
                     <div className="pokemon-photos">
                         {pokemonPhotoFront}

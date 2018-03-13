@@ -1,6 +1,7 @@
 import React from 'react';
 import { localforage } from './utils/localforageSetup';
 import { withStyles } from 'material-ui/styles';
+import Switch from 'material-ui/Switch';
 import Checkbox from 'material-ui/Checkbox';
 
 const styles = theme => ({
@@ -46,7 +47,11 @@ class MyPokemonCheckbox extends React.Component {
             }
     
         }).then(() => {
-            this.props.updateMyListAfterRemovingAPokemon(this.props.name);
+
+            if (!this.props.onMainPokemonPage) {
+                this.props.updateMyListAfterRemovingAPokemon(this.props.name);
+            }
+
             return localforage.getItem('pokemons')
         }).then((value) => {
             console.log(value);
@@ -55,9 +60,6 @@ class MyPokemonCheckbox extends React.Component {
     }
 
     addPokemonToList(pokemon, pokemonPhoto) {
-        console.log(pokemon);
-        console.log('photo: ' + pokemonPhoto);
-
         localforage.getItem('pokemons')
         .then((value) => {
 
@@ -71,7 +73,11 @@ class MyPokemonCheckbox extends React.Component {
             }
     
         }).then(() => {
-            this.props.updateMyListAfterAddingAPokemon(this.props.name);
+
+            if (!this.props.onMainPokemonPage) {
+                this.props.updateMyListAfterAddingAPokemon(this.props.name);
+            }
+
             return localforage.getItem('pokemons')
         }).then((value) => {
             console.log(value);
@@ -79,15 +85,53 @@ class MyPokemonCheckbox extends React.Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.onMainPokemonPage) {
+            if (nextProps.isPokemonInMyList) {
+                this.setState({
+                    checked: [nextProps.isPokemonInMyList]
+                })
+            } else {
+                this.setState({
+                    checked: []
+                })
+            }
+        }
+    }
+
+    handleTogglePokemonDetailsPage(pokemon) {
+        this.setState({
+            checked: this.state.checked.length > 0 ? [] : [true],
+        }, () => {
+            if (this.state.checked.length > 0) {
+                this.addPokemonToList(pokemon, this.props.pokemonPhoto);
+            } else {
+                this.removePokemonFromList(pokemon);
+            }
+        })
+    }
+
     render() {
-        return (
-            <Checkbox
-                onClick={(e) => { e.stopPropagation(); }}
-                onChange={this.handleToggle(this.props.name)}
-                checked={this.props.checked.indexOf(this.props.name) !== -1}
-                title={this.props.checked.indexOf(this.props.name) !== -1 ? "Izbaci Pokemona sa svoje liste" : "Dodaj Pokemona u listu"}
-            />
-        );
+        if (this.props.onMainPokemonPage) {
+            return (
+                <Switch
+                    onClick={(e) => { e.stopPropagation(); }}
+                    checked={this.state.checked.length > 0}
+                    onChange={(e) => {this.handleTogglePokemonDetailsPage(this.props.name)}}
+                    title={this.state.checked.length > 0 ? "Izbaci Pokemona iz moje liste" : "Dodaj Pokemona u listu"}
+                />
+            );
+        } else {
+            return (
+                <Checkbox
+                    onClick={(e) => { e.stopPropagation(); }}
+                    onChange={this.handleToggle(this.props.name)}
+                    checked={this.props.checked.indexOf(this.props.name) !== -1}
+                    title={this.props.checked.indexOf(this.props.name) !== -1 ? "Izbaci Pokemona iz moje liste" : "Dodaj Pokemona u listu"}
+                />
+            );
+        }
+
     }
 }
 
