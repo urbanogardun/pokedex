@@ -9,6 +9,7 @@ h1.pokemon-name {
   text-align: center;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;;
   font-weight: lighter;
+  padding-top: 70px;
 }
 
 h1.my-list {
