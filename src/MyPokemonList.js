@@ -1,6 +1,6 @@
 import React from 'react';
 import { localforage } from './utils/localforageSetup';
-import { Link } from 'react-router-dom';
+import { goToPokemon } from './utils/helpers';
 import MyPokemonCheckbox from './MyPokemonCheckbox';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
@@ -24,7 +24,6 @@ class MyPokemonList extends React.Component {
     componentWillMount() {
         localforage.getItem('pokemons')
         .then((result) => {
-            console.log(result);
             result = result === null ? [] : result;
             let namesOfPokemonsInMyList = result === null ? [] : result.map((val) => { return val.name })
             this.setState({
@@ -45,11 +44,10 @@ class MyPokemonList extends React.Component {
     render() {
         const { classes } = this.props;
         const pokemons = this.state.pokemonList.map((link) => {
-            console.log(link.name);
             return (
-                <ListItem key={`/pokemon/${link.name}`} dense button className={classes.listItem}>
+                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={`/pokemon/${link.name}`} dense button className={classes.listItem}>
                     <Avatar alt={link.name} src={link.photo} />
-                    <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
+                    <ListItemText primary={`${link.name}`} />
                         <ListItemSecondaryAction>
                             <MyPokemonCheckbox 
                             name={link.name} 
@@ -58,7 +56,6 @@ class MyPokemonList extends React.Component {
                             updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
                             />
                         </ListItemSecondaryAction>
-                    </Link>
                 </ListItem>
             );
         })

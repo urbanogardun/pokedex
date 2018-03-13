@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
 import { Pokedex } from './utils/Pokedex';
+import { goToPokemon } from './utils/helpers';
 import { localforage } from './utils/localforageSetup';
 import MyPokemonCheckbox from './MyPokemonCheckbox';
 import { withStyles } from 'material-ui/styles';
@@ -197,18 +197,17 @@ class PokemonList extends React.Component {
             let pokemonPhoto = getPokemonPhoto(link.url);
 
             return (
-                <ListItem key={link.url} dense button className={classes.listItem}>
+                <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={link.url} dense button className={classes.listItem}>
                     <Avatar alt={link.name} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`} />
-                    <Link className="pokemon-details-link" to={`/pokemon/${link.name}`}><ListItemText primary={`${link.name}`} />
-                        <ListItemSecondaryAction>
-                            <MyPokemonCheckbox 
-                            name={link.name} 
-                            pokemonPhoto={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`}
-                            checked={this.state.checked} 
-                            updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
-                            updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />
-                        </ListItemSecondaryAction>
-                    </Link>
+                    <ListItemText primary={`${link.name}`} />
+                    <ListItemSecondaryAction>
+                        <MyPokemonCheckbox 
+                        name={link.name} 
+                        pokemonPhoto={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonPhoto}`}
+                        checked={this.state.checked} 
+                        updateMyListAfterRemovingAPokemon={this.updateMyListAfterRemovingAPokemon}
+                        updateMyListAfterAddingAPokemon={this.updateMyListAfterAddingAPokemon} />
+                    </ListItemSecondaryAction>
                 </ListItem>
             );
         })
