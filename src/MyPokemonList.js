@@ -43,7 +43,7 @@ class MyPokemonList extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const pokemons = this.state.pokemonList.map((link) => {
+        const pokemons = this.state.pokemonList.reverse().map((link) => {
             return (
                 <ListItem onClick={() => { goToPokemon(this.props, `/pokemon/${link.name}`) }} key={`/pokemon/${link.name}`} dense button className={`${classes.listItem} pokemon-list-item`}>
                     <Avatar className="pokemon-avatar" alt={link.name} src={link.photo} />
@@ -60,9 +60,15 @@ class MyPokemonList extends React.Component {
             );
         })
 
+        let myListStats;
+        if (this.state.pokemonList.length) {
+            myListStats = <p className="my-list-total-pokemons">Dodano Pokemona: {this.state.pokemonList.length}</p>
+        }
         return (
+
             <div className={`${classes.root}`} id="my-pokemon-list">
                 <h1 className="my-list">Moji Pokemoni</h1>
+                {myListStats}
                 <List>
                     {pokemons}
                 </List>

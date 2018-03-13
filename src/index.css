@@ -19,6 +19,11 @@ h1.my-list {
   padding-top: 70px;
 }
 
+p.my-list-total-pokemons {
+  text-align: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;;
+}
+
 div.pokemon-photos {
   text-align: center;
 }
