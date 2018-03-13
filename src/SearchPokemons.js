@@ -101,7 +101,7 @@ function SearchPokemons(props) {
               fullWidth: true,
               classes,
               InputProps: getInputProps({
-                placeholder: 'Search a country (start with a)',
+                placeholder: 'Tražilica',
                 id: 'search-pokemons',
               }),
             })}
