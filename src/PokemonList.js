@@ -140,6 +140,11 @@ class PokemonList extends React.Component {
         let pokemonList = [];
         Pokedex.getPokemonsList(interval)
         .then(function (response) {
+
+            // Hide ajax loader and display retrieved pokemon data
+            document.getElementById('pokemon-list').style.visibility = 'initial';
+            document.getElementsByClassName('ajax-loader-pokemon-list-initial')[0].style.visibility = 'hidden';
+
             pokemonList = response.results;
             return localforage.getItem('pokemons')
         })
@@ -207,12 +212,15 @@ class PokemonList extends React.Component {
         })
 
         return (
-            <div className={`${classes.root}`} id="pokemon-list">
-                <List>
-                    {pokemons}
-                    <CircularProgress className="ajax-loader-pokemon-list" size={50} />
-                </List>
-            </div>
+            <React.Fragment>
+                <CircularProgress className="ajax-loader-pokemon-list-initial" size={50} />
+                <div className={`${classes.root}`} id="pokemon-list">
+                    <List>
+                        {pokemons}
+                        <CircularProgress className="ajax-loader-pokemon-list" size={50} />
+                    </List>
+                </div>
+            </React.Fragment>
         );
     }
 }
