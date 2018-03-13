@@ -11,6 +11,13 @@ h1.pokemon-name {
   font-weight: lighter;
 }
 
+h1.my-list {
+  text-align: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;;
+  font-weight: lighter;
+  padding-top: 70px;
+}
+
 div.pokemon-photos {
   text-align: center;
 }

@@ -65,7 +65,7 @@ class MyPokemonList extends React.Component {
 
         return (
             <div className={`${classes.root}`} id="my-pokemon-list">
-                <h1>My Pokemon List Goes Here!</h1>
+                <h1 className="my-list">Moji Pokemoni</h1>
                 <List>
                     {pokemons}
                 </List>
